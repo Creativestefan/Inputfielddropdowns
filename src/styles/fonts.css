@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "Open Runde";
+    src: url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.eot");
+    src: url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.eot?#iefix") format("embedded-opentype"),
+        url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.woff") format("woff"),
+        url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.woff2") format("woff2"),
+        url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.ttf") format("truetype"),
+        url("https://db.onlinewebfonts.com/t/69e6883cc0ff6112a74af1228f273734.svg#Open Runde") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
