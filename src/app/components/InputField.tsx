@@ -466,7 +466,7 @@ export function InputField() {
   return (
     <>
       {/* ── Lightbox portal ── */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {lightbox && (
           <Lightbox
             src={lightbox.src}
@@ -474,7 +474,7 @@ export function InputField() {
             onClose={() => setLightbox(null)}
           />
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <motion.div
         layout

@@ -42,24 +42,27 @@ export function ToggleButton({
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       className="flex items-center gap-[6px] px-[6px] py-[4px] rounded-md cursor-pointer"
-      animate={{ background: bg }}
+      style={{
+        background: bg,
+        transition: "background 0.18s ease-in-out",
+      }}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.18, ease: "easeInOut" }}
     >
       {icon(resolvedColor)}
 
-      <motion.span
-        animate={{ color: resolvedColor }}
-        transition={{ duration: 0.18, ease: "easeInOut" }}
+      <span
         style={{
           fontSize: "var(--text-sm)",
           fontFamily: "var(--font-family-open-runde)",
           fontWeight: "var(--font-weight-medium)",
           lineHeight: "20px",
+          color: resolvedColor,
+          transition: "color 0.18s ease-in-out",
         }}
       >
         {label}
-      </motion.span>
+      </span>
     </motion.button>
   );
 }

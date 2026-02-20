@@ -203,9 +203,17 @@ export function AppsDropdown({
         ref={triggerRef}
         onClick={() => onOpenChange(!open)}
         className="flex items-center gap-[6px] px-[10px] py-[4px] rounded-[10px] cursor-pointer overflow-hidden"
-        initial={{ background: "rgba(0,0,0,0)" }}
-        animate={{ background: pillBg }}
-        whileHover={{ background: pillBgHover }}
+        style={{
+          background: pillBg,
+          transition: "background 0.25s cubic-bezier(0.16,1,0.3,1)",
+        }}
+        onMouseEnter={(e) =>
+          ((e.currentTarget as HTMLButtonElement).style.background = pillBgHover)
+        }
+        onMouseLeave={(e) =>
+          ((e.currentTarget as HTMLButtonElement).style.background = pillBg)
+        }
+        whileTap={{ scale: 0.97 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
         <motion.span layout="preserve-aspect" className="shrink-0">
