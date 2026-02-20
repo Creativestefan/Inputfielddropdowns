@@ -1,6 +1,8 @@
 import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
 import { DropdownSelect } from "./ui/DropdownSelect";
 import { AppsDropdown } from "./ui/AppsDropdown";
@@ -21,7 +23,8 @@ import {
   GitHubIcon,
 } from "./ui/AppsDropdown";
 
-import svgPaths from "../../imports/svg-865aketb4c";
+// remove this line:
+// import svgPaths from "../../imports/svg-865aketb4c";
 
 // ─── Active app icon map ───────────────────────────────────────────────────────
 
@@ -146,14 +149,7 @@ function Lightbox({
             boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
           }}
         >
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path
-              d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} color="rgba(255,255,255,0.9)" />
         </button>
       </motion.div>
     </motion.div>,
@@ -246,14 +242,7 @@ function FileThumbnail({
           zIndex: 2,
         }}
       >
-        <svg width="7" height="7" viewBox="0 0 7 7" fill="none">
-          <path
-            d="M1 1L6 6M6 1L1 6"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-          />
-        </svg>
+        <HugeiconsIcon icon={Cancel01Icon} size={8} strokeWidth={2.5} color="var(--background)" />
       </button>
     </motion.div>
   );
@@ -320,26 +309,7 @@ function QuoteBlock({
               "transparent")
           }
         >
-          <div className="relative shrink-0" style={{ width: 16, height: 16 }}>
-            <div className="absolute inset-1/4">
-              <div className="absolute" style={{ inset: "-8.31%" }}>
-                <svg
-                  className="block size-full"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  viewBox="0 0 9.33 9.33"
-                >
-                  <path
-                    d={svgPaths.p24442000}
-                    stroke="var(--muted-foreground)"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.33"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
+          <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={1.5} color="var(--muted-foreground)" />
         </button>
       </div>
     </div>

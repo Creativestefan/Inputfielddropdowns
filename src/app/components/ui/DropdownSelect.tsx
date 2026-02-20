@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDownIcon } from "../icons/InputIcons";
-import svgPaths from "../../../imports/svg-wy7bgu64r7";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, CheckmarkCircle01Icon } from "@hugeicons/core-free-icons";
 
 interface DropdownSelectProps {
   /** Icon rendered to the left of the label — pass `null` to omit */
@@ -321,26 +322,7 @@ export function DropdownSelect({
               <div className="relative shrink-0 w-full">
                 <div className="flex items-center px-[12px] py-[10px] gap-[8px]">
                   {/* Search icon */}
-                  <div className="shrink-0 size-[16px] relative overflow-clip">
-                    <div className="absolute inset-[12.5%]">
-                      <div className="absolute inset-[-5.54%]">
-                        <svg
-                          className="block size-full"
-                          fill="none"
-                          preserveAspectRatio="none"
-                          viewBox="0 0 13.33 13.33"
-                        >
-                          <path
-                            d={svgPaths.p23c44180}
-                            stroke="var(--popover-foreground)"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.33"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+                  <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={1.5} color="var(--muted-foreground)" className="shrink-0" />
                   {/* Search input */}
                   <input
                     ref={searchRef}
@@ -424,26 +406,13 @@ export function DropdownSelect({
                          </span>
                          {/* Check on the right for selected */}
                          {isSelected && (
-                           <div className="shrink-0 size-[16px] relative overflow-clip flex items-center justify-center pt-[2px]">
-                             <div className="absolute bottom-[29.17%] left-[16.67%] right-[16.67%] top-1/4">
-                               <div className="absolute inset-[-9.07%_-6.23%]">
-                                 <svg
-                                   className="block size-full"
-                                   fill="none"
-                                   preserveAspectRatio="none"
-                                   viewBox="0 0 11.9967 8.66333"
-                                 >
-                                   <path
-                                     d={svgPaths.p337e1400}
-                                     stroke="var(--popover-foreground)"
-                                     strokeLinecap="round"
-                                     strokeLinejoin="round"
-                                     strokeWidth="1.33"
-                                   />
-                                 </svg>
-                               </div>
-                             </div>
-                           </div>
+                           <HugeiconsIcon
+                             icon={CheckmarkCircle01Icon}
+                             size={16}
+                             strokeWidth={1.5}
+                             color="var(--popover-foreground)"
+                             className="shrink-0"
+                           />
                          )}
                        </motion.button>
                      );
