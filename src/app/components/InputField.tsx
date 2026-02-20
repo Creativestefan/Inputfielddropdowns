@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { BurstAnimation } from "./animations/BurstAnimation";
 
 import { DropdownSelect } from "./ui/DropdownSelect";
 import { AppsDropdown } from "./ui/AppsDropdown";
@@ -23,9 +24,6 @@ import {
   GitHubIcon,
 } from "./ui/AppsDropdown";
 
-// remove this line:
-// import svgPaths from "../../imports/svg-865aketb4c";
-
 // ─── Active app icon map ───────────────────────────────────────────────────────
 
 const APP_ICON_MAP: Record<string, React.ReactNode> = {
@@ -45,6 +43,19 @@ const WORKSPACE_OPTIONS = [
   "Creative Projects",
 ];
 const MODEL_OPTIONS = ["Mistral 3", "Opus 4.6", "GPT-5.2", "Gemini 3.0"];
+
+// ─── File entry type ──────────────────────────────────────────────────────────
+
+interface AttachedFileEntry {
+  id: string;
+  file: File;
+  objectUrl: string | null;
+}
+
+// How long (ms) the Lottie plays before the card is actually removed
+// Burst animates frames 0-33 @ 30fps = ~1.1s. At 2× speed that's ~550ms.
+// Hold for 480ms so the gap closes right as the burst finishes.
+const REMOVE_ANIM_DURATION = 480;
 
 // ─── File type helpers ────────────────────────────────────────────────────────
 
@@ -67,7 +78,6 @@ function Lightbox({
   name: string;
   onClose: () => void;
 }) {
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -86,7 +96,6 @@ function Lightbox({
       style={{ zIndex: 9999, background: "rgba(0,0,0,0.78)", backdropFilter: "blur(6px)" }}
       onClick={onClose}
     >
-      {/* Image container — stops propagation so clicking the image itself doesn't close */}
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -103,18 +112,17 @@ function Lightbox({
           style={{
             maxWidth: "90vw",
             maxHeight: "90vh",
-            borderRadius: 10,
+            borderRadius: "var(--radius-lg)",
             boxShadow: "0 24px 80px rgba(0,0,0,0.6)",
             objectFit: "contain",
           }}
         />
 
-        {/* Filename caption */}
         <div
           className="absolute bottom-0 left-0 right-0 flex items-center justify-center"
           style={{
             padding: "12px 16px",
-            borderRadius: "0 0 10px 10px",
+            borderRadius: "0 0 var(--radius-lg) var(--radius-lg)",
             background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)",
           }}
         >
@@ -131,7 +139,6 @@ function Lightbox({
           </span>
         </div>
 
-        {/* Close button — top-right of image */}
         <button
           onClick={onClose}
           aria-label="Close preview"
@@ -164,86 +171,111 @@ function FileThumbnail({
   objectUrl,
   onRemove,
   onPreview,
+  isRemoving,
 }: {
   file: File;
   objectUrl: string | null;
   onRemove: () => void;
   onPreview: () => void;
+  isRemoving: boolean;
 }) {
   const isImage = isImageFile(file);
+  const [hovered, setHovered] = useState(false);
 
   return (
     <motion.div
       layout
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.85 }}
-      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      exit={{ opacity: 0, scale: 0.75 }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative shrink-0"
-      // Extra padding at top-right so the remove badge isn't clipped
       style={{ width: 45 + 8, height: 44 + 8, paddingTop: 6, paddingRight: 6 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Card body */}
-      <div
-        className="w-full h-full overflow-hidden flex items-center justify-center"
-        style={{
-          width: 45,
-          height: 44,
-          borderRadius: 5,
-          background: isImage ? "transparent" : "var(--muted)",
-          boxShadow: "0px 0.28px 0.56px 0px rgba(0,0,0,0.08), 0px 0px 0px 1px var(--border)",
-          cursor: isImage ? "pointer" : "default",
-        }}
-        onClick={isImage ? onPreview : undefined}
-        role={isImage ? "button" : undefined}
-        aria-label={isImage ? `Preview ${file.name}` : undefined}
-      >
-        {isImage && objectUrl ? (
-          <img
-            src={objectUrl}
-            alt={file.name}
-            className="w-full h-full"
-            style={{ objectFit: "cover", borderRadius: 5, display: "block" }}
-          />
-        ) : (
-          <span
+      {isRemoving ? (
+        /* ── Burst Lottie — plays once from embedded JSON ── */
+        <div
+          className="flex items-center justify-center overflow-hidden"
+          style={{ width: 45, height: 44, borderRadius: 5 }}
+        >
+          <BurstAnimation size={70} />
+        </div>
+      ) : (
+        <>
+          {/* Card body */}
+          <div
+            className="w-full h-full overflow-hidden flex items-center justify-center"
             style={{
-              fontSize: "var(--text-xs)",
-              fontFamily: "var(--font-family-open-runde)",
-              fontWeight: "var(--font-weight-semibold)",
-              color: "var(--muted-foreground)",
-              lineHeight: "14px",
-              letterSpacing: "0.02em",
+              width: 45,
+              height: 44,
+              borderRadius: 5,
+              background: isImage ? "transparent" : "var(--muted)",
+              boxShadow: "0px 0.28px 0.56px 0px rgba(0,0,0,0.08), 0px 0px 0px 1px var(--border)",
+              cursor: isImage ? "pointer" : "default",
             }}
+            onClick={isImage ? onPreview : undefined}
+            role={isImage ? "button" : undefined}
+            aria-label={isImage ? `Preview ${file.name}` : undefined}
           >
-            {getFileExt(file.name)}
-          </span>
-        )}
-      </div>
+            {isImage && objectUrl ? (
+              <img
+                src={objectUrl}
+                alt={file.name}
+                className="w-full h-full"
+                style={{ objectFit: "cover", borderRadius: 5, display: "block" }}
+              />
+            ) : (
+              <span
+                style={{
+                  fontSize: "var(--text-xs)",
+                  fontFamily: "var(--font-family-open-runde)",
+                  fontWeight: "var(--font-weight-semibold)",
+                  color: "var(--muted-foreground)",
+                  lineHeight: "14px",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {getFileExt(file.name)}
+              </span>
+            )}
+          </div>
 
-      {/* Remove badge — always visible, pinned to top-right corner */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove();
-        }}
-        aria-label={`Remove ${file.name}`}
-        className="absolute flex items-center justify-center cursor-pointer"
-        style={{
-          top: 0,
-          right: 0,
-          width: 16,
-          height: 16,
-          borderRadius: "50%",
-          background: "var(--foreground)",
-          border: "1.5px solid var(--card)",
-          padding: 0,
-          color: "var(--background)",
-          zIndex: 2,
-        }}
-      >
-        <HugeiconsIcon icon={Cancel01Icon} size={8} strokeWidth={2.5} color="var(--background)" />
-      </button>
+          {/* Remove badge — animated in/out on hover */}
+          <AnimatePresence>
+            {hovered && (
+              <motion.button
+                key="remove"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove();
+                }}
+                aria-label={`Remove ${file.name}`}
+                className="absolute flex items-center justify-center cursor-pointer"
+                style={{
+                  top: 0,
+                  right: 0,
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  background: "var(--foreground)",
+                  border: "1.5px solid var(--card)",
+                  padding: 0,
+                  zIndex: 2,
+                  transformOrigin: "center center",
+                }}
+              >
+                <HugeiconsIcon icon={Cancel01Icon} size={8} strokeWidth={2.5} color="var(--background)" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </motion.div>
   );
 }
@@ -262,7 +294,7 @@ function QuoteBlock({
       className="relative shrink-0 w-full overflow-hidden"
       style={{
         background: "var(--muted)",
-        borderRadius: "10px",
+        borderRadius: "var(--radius)",
         maxHeight: 56,
       }}
     >
@@ -322,12 +354,13 @@ export function InputField() {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  // File attachment ────────────────────────────────────────────────────────────
+  // File attachment ─────────────────────────────────────────────────────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-  const [objectUrls, setObjectUrls] = useState<Record<number, string>>({});
+  const [attachedFiles, setAttachedFiles] = useState<AttachedFileEntry[]>([]);
+  // IDs of files currently showing the Lottie removal animation
+  const [removingIds, setRemovingIds] = useState<Set<string>>(new Set());
 
-  // Lightbox state
+  // Lightbox
   const [lightbox, setLightbox] = useState<{ src: string; name: string } | null>(null);
 
   const ACCEPTED_TYPES = [
@@ -342,37 +375,46 @@ export function InputField() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
-    setAttachedFiles((prev) => {
-      const newUrls: Record<number, string> = {};
-      files.forEach((f, relIdx) => {
-        if (isImageFile(f)) {
-          newUrls[prev.length + relIdx] = URL.createObjectURL(f);
-        }
-      });
-      setObjectUrls((u) => ({ ...u, ...newUrls }));
-      return [...prev, ...files];
-    });
+    const newEntries: AttachedFileEntry[] = files.map((f) => ({
+      id: `${f.name}-${Date.now()}-${Math.random()}`,
+      file: f,
+      objectUrl: isImageFile(f) ? URL.createObjectURL(f) : null,
+    }));
+    setAttachedFiles((prev) => [...prev, ...newEntries]);
     e.target.value = "";
   };
 
-  const removeFile = (index: number) => {
-    if (objectUrls[index]) URL.revokeObjectURL(objectUrls[index]);
-    setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
-    setObjectUrls((urls) => {
-      const rebuilt: Record<number, string> = {};
-      Object.entries(urls).forEach(([k, v]) => {
-        const ki = parseInt(k);
-        if (ki < index) rebuilt[ki] = v;
-        else if (ki > index) rebuilt[ki - 1] = v;
+  /**
+   * Step 1 — mark as removing (shows Lottie animation in place)
+   * Step 2 — after REMOVE_ANIM_DURATION, remove from array
+   *           Motion layout then smoothly closes the gap
+   */
+  const removeFile = (id: string) => {
+    // Already animating → ignore double-click
+    if (removingIds.has(id)) return;
+
+    setRemovingIds((prev) => new Set(prev).add(id));
+
+    setTimeout(() => {
+      setAttachedFiles((prev) => {
+        const entry = prev.find((e) => e.id === id);
+        if (entry?.objectUrl) URL.revokeObjectURL(entry.objectUrl);
+        return prev.filter((e) => e.id !== id);
       });
-      return rebuilt;
-    });
+      setRemovingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }, REMOVE_ANIM_DURATION);
   };
 
   // Revoke all object URLs on unmount
   useEffect(() => {
     return () => {
-      Object.values(objectUrls).forEach((url) => URL.revokeObjectURL(url));
+      attachedFiles.forEach((e) => {
+        if (e.objectUrl) URL.revokeObjectURL(e.objectUrl);
+      });
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -393,9 +435,7 @@ export function InputField() {
   }, [text]);
 
   // Quote state
-  const [quoteText, setQuoteText] = useState<string | null>(
-    "That\u2019s a strong framing. If the core pain is \u201cattention allocation,\u201d then the product isn\u2019t a task tracker\u2014it\u2019s a prioritisation engine.",
-  );
+  const [quoteText, setQuoteText] = useState<string | null>(null);
 
   // Dropdown open states
   const [appsOpen, setAppsOpen] = useState(false);
@@ -567,38 +607,39 @@ export function InputField() {
               {attachedFiles.length > 0 && (
                 <motion.div
                   key="file-carousel"
+                  layout
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  // overflow-visible so the remove badges that poke outside don't clip
                   className="w-full overflow-visible"
                 >
-                  <div
+                  <motion.div
+                    layout
                     className="flex items-center overflow-x-auto overflow-y-visible"
+                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                     style={{
-                      // Left/right padding to align with textarea text;
-                      // top padding to give room for the remove badge (-6px offset)
                       padding: "0 10px 8px 10px",
                       gap: 4,
                       scrollbarWidth: "none",
                     }}
                   >
                     <AnimatePresence initial={false}>
-                      {attachedFiles.map((file, i) => (
+                      {attachedFiles.map((entry) => (
                         <FileThumbnail
-                          key={`${file.name}-${i}`}
-                          file={file}
-                          objectUrl={objectUrls[i] ?? null}
-                          onRemove={() => removeFile(i)}
+                          key={entry.id}
+                          file={entry.file}
+                          objectUrl={entry.objectUrl}
+                          isRemoving={removingIds.has(entry.id)}
+                          onRemove={() => removeFile(entry.id)}
                           onPreview={() => {
-                            const url = objectUrls[i];
-                            if (url) setLightbox({ src: url, name: file.name });
+                            if (entry.objectUrl)
+                              setLightbox({ src: entry.objectUrl, name: entry.file.name });
                           }}
                         />
                       ))}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>

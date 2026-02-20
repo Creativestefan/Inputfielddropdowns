@@ -1,3 +1,11 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+
+/* Ensure html + body share the single design-system background.
+   The .dark class is set on <html> in App.tsx so all tokens resolve
+   from the dark scope — no stacked layers with different colours. */
+html,
+body {
+  background-color: var(--background);
+}

@@ -23,8 +23,8 @@ export function SendButton({ hasText, onClick }: SendButtonProps) {
       aria-label={showArrow ? "Send" : "Voice input"}
       className="flex items-center justify-center rounded-md shrink-0 size-[28px] hover:opacity-90 cursor-pointer overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%), #048af5",
-        boxShadow: "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px #048af5",
+        background: "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%), var(--switch-active-bg)",
+        boxShadow: "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px var(--switch-active-bg)",
       }}
     >
       <AnimatePresence mode="wait" initial={false}>

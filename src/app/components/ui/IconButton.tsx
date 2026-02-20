@@ -16,12 +16,12 @@ export function IconButton({
 }: IconButtonProps) {
   const bg =
     variant === "primary"
-      ? "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%), #048af5"
+      ? "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%), var(--switch-active-bg)"
       : "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 100%), var(--secondary)";
 
   const shadow =
     variant === "primary"
-      ? "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px #048af5"
+      ? "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px var(--switch-active-bg)"
       : "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px var(--border)";
 
   return (

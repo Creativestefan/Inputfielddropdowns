@@ -12,6 +12,8 @@ interface ToggleButtonProps {
   activeColor?: string;
   /** CSS variable or value for active background */
   activeBg?: string;
+  /** CSS variable or value for hover background (inactive state) */
+  hoverBg?: string;
 }
 
 export function ToggleButton({
@@ -21,6 +23,7 @@ export function ToggleButton({
   label,
   activeColor = "var(--research-active-color)",
   activeBg = "var(--research-active-bg)",
+  hoverBg = "var(--muted)",
 }: ToggleButtonProps) {
   const [hovered, setHovered] = useState(false);
   const resolvedColor = active ? activeColor : "var(--muted-foreground)";
@@ -30,7 +33,7 @@ export function ToggleButton({
   const bg = active
     ? activeBg
     : hovered
-      ? "rgba(255,255,255,0.04)"
+      ? hoverBg
       : "rgba(0,0,0,0)";
 
   return (

@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDownIcon } from "../icons/InputIcons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Search01Icon, CheckmarkCircle01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
 
 interface DropdownSelectProps {
   /** Icon rendered to the left of the label — pass `null` to omit */
@@ -312,9 +312,11 @@ export function DropdownSelect({
               width: menuWidth,
               minWidth: 192,
               maxWidth: 576,
-              borderRadius: 10,
+              borderRadius: "var(--radius-input)",
               background: "var(--popover)",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+              border: "1px solid var(--border)",
+              boxShadow:
+                "0px 2px 4px -2px rgba(0,0,0,0.12), 0px 4px 6px -1px rgba(0,0,0,0.16)",
             }}
           >
             {/* Search field */}
@@ -382,7 +384,7 @@ export function DropdownSelect({
                          }}
                          onMouseEnter={(e) =>
                            (e.currentTarget.style.background =
-                             "var(--accent)")
+                             "rgba(255, 255, 255, 0.045)")
                          }
                          onMouseLeave={(e) =>
                            (e.currentTarget.style.background =
@@ -407,7 +409,7 @@ export function DropdownSelect({
                          {/* Check on the right for selected */}
                          {isSelected && (
                            <HugeiconsIcon
-                             icon={CheckmarkCircle01Icon}
+                             icon={Tick01Icon}
                              size={16}
                              strokeWidth={1.5}
                              color="var(--popover-foreground)"
@@ -444,10 +446,9 @@ export function DropdownSelect({
             {/* Outer inset border overlay */}
             <div
               aria-hidden="true"
-              className="absolute pointer-events-none"
+              className="absolute inset-0 pointer-events-none"
               style={{
-                inset: -1,
-                borderRadius: 11,
+                borderRadius: "var(--radius-input)",
                 border: "1px solid var(--border)",
               }}
             />

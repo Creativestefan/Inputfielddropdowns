@@ -1,200 +1,321 @@
 @custom-variant dark (&:is(.dark *));
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESIGN SYSTEM — LIGHT MODE
+   All color values use OKLCH for wide-gamut display accuracy.
+   Typography, radius, and shadow tokens are preserved for component use.
+───────────────────────────────────────────────────────────────────────────── */
 :root {
+
+  /* ── Typography scale ──────────────────────────────────────────────────── */
   --font-size: 16px;
-  /* Typography variables */
-  --text-6xl: 60px; /* h1 - main page titles and hero section headings */
-  --text-5xl: 48px; /* h2 - major section headings within a page */
-  --text-2xl: 24px; /* h3 - sub-section headings, page titles, card titles */
-  --text-lg: 18px; /* h4 - smaller headings, card titles, blog post titles */
-  --text-base: 16px; /* p - default body text for paragraphs and content */
-  --text-sm: 14px; /* button-text - button labels and interactive elements */
-  --text-xs: 12px; /* label - small labels, badges, captions, metadata */
-  --font-family-open-runde: 'Open Runde', sans-serif;
-  --font-family-jetbrains: 'JetBrains Mono', monospace;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
+  --text-6xl: 60px;   /* h1  — hero / page title */
+  --text-5xl: 48px;   /* h2  — section heading */
+  --text-2xl: 24px;   /* h3  — sub-section / card title */
+  --text-lg:  18px;   /* h4  — smaller heading */
+  --text-base: 16px;  /* p   — body text */
+  --text-sm:  14px;   /* btn — button labels */
+  --text-xs:  12px;   /* lbl — captions, badges, meta */
+
+  /* ── Font faces (alias long names for easy component use) ─────────────── */
+  --font-sans:                Open Runde;
+  --font-serif:               Georgia;
+  --font-mono:                JetBrains Mono;
+  --font-family-open-runde:  'Open Runde', sans-serif;
+  --font-family-jetbrains:   'JetBrains Mono', monospace;
+
+  /* ── Font weights ──────────────────────────────────────────────────────── */
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
   --font-weight-semibold: 600;
-  
-  /* The default background color for the application. */
-  --background: rgba(255, 255, 255, 1.00);
-  /* The default color for elements or text that appears on top of the background. */
-  --foreground: rgba(9, 9, 11, 1.00);
-  /* The background color for cards, modals, and other containers. */
-  --card: rgba(255, 255, 255, 1.00);
-  /* The default color for text or elements that appear on top of cards, modals and other background containers. */
-  --card-foreground: rgba(9, 9, 11, 1.00);
-  /* The background color for dropdowns and tooltips. */
-  --popover: rgba(186, 151, 255, 1.00);
-  /* The default color for text or elements that appear on top of dropdowns and tooltips. */
-  --popover-foreground: rgba(250, 250, 250, 1.00);
-  /* The primary color used for buttons, links, and other interactive elements. */
-  --primary: rgba(186, 151, 255, 1.00);
-  /* The default color for text or elements that appear on top of primary colored elements. */
-  --primary-foreground: rgba(250, 250, 250, 1.00);
-  /* The secondary color used for secondary(but NOT-DESTRUCTIVE) buttons and interactive elements. */
-  --secondary: rgba(245, 245, 245, 1.00);
-  /* The default color for text or elements that appear on top of secondary colored elements. */
-  --secondary-foreground: rgba(23, 23, 23, 1.00);
-  /* The muted color used for less prominent elements, such as disabled buttons or disabled text. */
-  --muted: rgba(244, 244, 245, 1.00);
-  /* The default color for text or elements that appear on top of muted colored elements. */
-  --muted-foreground: rgba(113, 113, 122, 1.00);
-  /* The accent color used for highlights, links, and other interactive elements. */
-  --accent: rgba(241, 245, 249, 1.00);
-  /* The default color for text or elements that appear on top of accent colored elements. */
-  --accent-foreground: rgba(15, 23, 42, 1.00);
-  /* The color used for background in destructive actions, such as delete buttons or error messages. */
-  --destructive: rgba(231, 0, 11, 1.00);
-  /* The default color for text or elements that appear on top of destructive colored elements. */
-  --destructive-foreground: rgba(250, 250, 250, 1.00);
-  /* The default border color for elements such as inputs, buttons, and other containers. */
-  --border: rgba(228, 228, 231, 1.00);
-  /* The default background color for input fields once the text has been filled. Should be either transparent or match the input-background. */
-  --input: rgba(230, 230, 230, 1.00);
-  /* The default background color for input fields, text areas, and other input elements. */
-  --input-background: rgba(255, 255, 255, 1.00);
-  /* The color for focus rings, outlines, and other focus indicators. */
-  --ring: rgba(145, 127, 215, 1.00);
-  /* Background color for the Research toggle active/pressed state. */
-  --research-active-bg: #0a1a2a;
-  /* Icon and text color for the Research toggle active/pressed state. */
-  --research-active-color: #359BFF;
-  /* Border color for focused input fields. */
-  --input-focus-border: #359bff;
-  /* Outer glow/shadow color for focused input fields. */
-  --input-focus-glow: rgba(53, 155, 255, 0.5);
-  /* Background color for an active/on toggle switch. */
-  --switch-active-bg: #048af5;
-  /* Background color for an inactive/off toggle switch. */
-  --switch-inactive-bg: rgba(255, 255, 255, 0.14);
-  /* Shadow for small elevations, such as cards or modals. */
-  --elevation-sm: 0px 1px 2px 0px rgba(26, 26, 26, 0.05);
-  /* The color for chart elements, such as a bar or line in a chart. */
-  --chart-1: rgba(143, 198, 255, 1.00);
-  /* The color for another chart element, such as a bar or line in a chart. */
-  --chart-2: rgba(41, 126, 255, 1.00);
-  /* The color for another chart element, such as a bar or line in a chart. */
-  --chart-3: rgba(21, 93, 252, 1.00);
-  /* The color for another chart element, such as a bar or line in a chart. */
-  --chart-4: rgba(20, 71, 230, 1.00);
-  /* The color for another chart element, such as a bar or line in a chart. */
-  --chart-5: rgba(25, 60, 184, 1.00);
-  /* The default border radius for elements such as buttons, cards, and other containers. */
-  --radius: 8px;
-  /* Button border radius for pill-shaped buttons. */
-  --radius-button: 9999px;
-  /* Card border radius for larger containers. */
-  --radius-card: 18px;
-  /* Input field border radius. */
-  --radius-input: 14px;
-  /* Small border radius for checkbox elements and similar small interactive components. */
+
+  /* ── Border radius ─────────────────────────────────────────────────────── */
+  --radius:          8px;
+  --radius-button:   9999px;
+  --radius-card:     18px;
+  --radius-input:    14px;
   --radius-checkbox: 4px;
-  /* The background color for sidebars, navigation menus, and other persistent elements. */
-  --sidebar: rgba(250, 250, 250, 1.00);
-  /* The default color for text or elements that appear on top of sidebars, navigation menus, and other persistent elements. */
-  --sidebar-foreground: rgba(10, 10, 10, 1.00);
-  /* The primary color used for buttons, links, and other interactive elements in sidebars and navigation menus. */
-  --sidebar-primary: rgba(23, 23, 23, 1.00);
-  /* The default color for text or elements that appear on top of primary colored elements in sidebars and navigation menus. */
-  --sidebar-primary-foreground: rgba(250, 250, 250, 1.00);
-  /* The accent color used for highlights, links, and other interactive elements in sidebars and navigation menus. */
-  --sidebar-accent: rgba(245, 245, 245, 1.00);
-  /* The default color for text or elements that appear on top of accent colored elements in sidebars and navigation menus. */
-  --sidebar-accent-foreground: rgba(23, 23, 23, 1.00);
-  /* The default border color for elements in sidebars and navigation menus. */
-  --sidebar-border: rgba(230, 230, 230, 1.00);
-  /* The default color for focus rings, outlines, and other focus indicators in sidebars and navigation menus. */
-  --sidebar-ring: rgba(161, 161, 161, 0.64);
+
+  /* ── Color primitives — OKLCH ──────────────────────────────────────────── */
+  --background:          oklch(1.0000 0.0000 89.8756);
+  --foreground:          oklch(0.1408 0.0044 285.8229);
+  --accent:              oklch(0.8414 0.0859 242.9137);
+  --accent-foreground:   oklch(0.2103 0.0059 285.8852);
+  --muted:               oklch(0.9674 0.0013 286.3752);
+  --muted-foreground:    oklch(0.5511 0.0144 285.9168);
+  --card:                oklch(0.9851 0.0000 89.8756);
+  --card-foreground:     oklch(0.1408 0.0044 285.8229);
+  --popover:             oklch(1.0000 0.0000 89.8756);
+  --popover-foreground:  oklch(0.1408 0.0044 285.8229);
+  --border:              oklch(0.9197 0.0040 286.3202);
+  --input:               oklch(0.9249 0.0000 89.8756);
+  --primary:             oklch(0.6809 0.1737 251.6084);
+  --primary-foreground:  oklch(0.9851 0.0000 89.8756);
+  --secondary:           oklch(0.9702 0.0000 89.8756);
+  --secondary-foreground:oklch(0.2046 0.0000 89.8756);
+  --destructive:         oklch(0.5830 0.2387 28.4765);
+  --destructive-foreground: oklch(0.9851 0.0000 89.8756);
+  --ring:                oklch(0.6290 0.1870 252.0000);
+  --sidebar:             oklch(0.9851 0.0000 89.8756);
+  --sidebar-foreground:  oklch(0.1448 0.0000 89.8756);
+  --sidebar-primary:     oklch(0.2046 0.0000 89.8756);
+  --sidebar-primary-foreground: oklch(0.9851 0.0000 89.8756);
+  --sidebar-accent:      oklch(0.9702 0.0000 89.8756);
+  --sidebar-accent-foreground:  oklch(0.2046 0.0000 89.8756);
+  --sidebar-border:      oklch(0.9249 0.0000 89.8756);
+  --sidebar-ring:        oklch(0.7079 0.0000 89.8756 / 0.64);
+
+  /* ── Extended palette ──────────────────────────────────────────────────── */
+  --custom-focus:              oklch(0.6809 0.1737 251.6084 / 0.5);
+  --custom-destructive-focus:  oklch(0.5786 0.2137 27.1659 / 0.40);
+  --custom-bg-input-30:        oklch(1.0000 0.0000 89.8756);
+  --custom-bg-input-50:        oklch(0.9702 0.0000 89.8756);
+  --custom-bg-input-80:        oklch(0.9219 0.0000 89.8756);
+  --custom-bg-primary-10:      oklch(0.2046 0.0000 89.8756 / 0.05);
+  --custom-dark-input:         oklch(1.0000 0.0000 89.8756 / 0);
+  --custom-border-subtle:      oklch(0.0000 0.0000 0.0000 / 0.05);
+  --opacity-90:                oklch(1.0000 0.0000 89.8756 / 0.10);
+  --opacity-80:                oklch(1.0000 0.0000 89.8756 / 0.20);
+  --opacity-50:                oklch(1.0000 0.0000 89.8756 / 0.5);
+  --opacity-30:                oklch(1.0000 0.0000 89.8756 / 0.70);
+  --opacity-100:               oklch(1.0000 0.0000 89.8756 / 0);
+
+  /* ── Status colors ─────────────────────────────────────────────────────── */
+  --success:              oklch(0.4987 0.1168 157.0704);
+  --success-foreground:   oklch(0.9788 0.0221 160.2443);
+  --success-ring:         oklch(0.8958 0.0886 157.5857);
+  --warning:              oklch(0.5394 0.1562 42.9937);
+  --warning-foreground:   oklch(0.9849 0.0204 91.5789);
+  --warning-ring:         oklch(0.9112 0.1109 90.2750);
+  --info:                 oklch(0.9550 0.0251 235.2112);
+  --info-foreground:      oklch(0.3530 0.1030 252.0000);
+  --info-ring:            oklch(0.9011 0.0571 231.4652);
+
+  /* ── Chart colors ──────────────────────────────────────────────────────── */
+  --chart-chart-1: oklch(0.8098 0.0994 250.0063);
+  --chart-chart-2: oklch(0.6162 0.2083 259.2354);
+  --chart-chart-3: oklch(0.5465 0.2455 262.8657);
+  --chart-chart-4: oklch(0.4881 0.2429 264.3816);
+  --chart-chart-5: oklch(0.4242 0.1982 265.4989);
+
+  /* ── Shadows ───────────────────────────────────────────────────────────── */
+  --shadow-2xs: 0px 1px 2px hsl(0 0% 0% / 0.17);
+  --shadow-xs:  0px 1px 2px hsl(0 0% 0% / 0.17);
+  --shadow-sm:  0px 1px 4px -1px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+  --shadow-md:  0px 2px 4px -2px hsl(0 0% 0% / 0.17), 0px 4px 6px -1px hsl(0 0% 0% / 0.17);
+  --shadow-lg:  0px 4px 6px -4px hsl(0 0% 0% / 0.17), 0px 10px 15px -3px hsl(0 0% 0% / 0.17);
+  --shadow-xl:  0px 4px 6px -4px hsl(0 0% 0% / 0.17), 0px 8px 10px -1px hsl(0 0% 0% / 0.17);
+  --shadow-2xl: 0px 1px 2px hsl(0 0% 0% / 0.17);
+  --shadow:     0px 2px 4px -2px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+
+  /* ── Component tokens — mapped to primitives above ─────────────────────
+     Update these to re-skin interactive controls without touching components.
+  ────────────────────────────────────────────────────────────────────────── */
+
+  /* Input field background (filled / unfilled) */
+  --input-background:      var(--input);
+  /* Border shown on a focused input */
+  --input-focus-border:    var(--primary);
+  /* Outer glow on a focused input */
+  --input-focus-glow:      var(--custom-focus);
+
+  /* Toggle switch — on / off track fill */
+  --switch-active-bg:      var(--primary);
+  --switch-inactive-bg:    var(--border);
+
+  /* Research toggle active state */
+  --research-active-bg:    var(--accent);
+  --research-active-color: var(--primary);
+
+  /* Generic small card / modal elevation */
+  --elevation-sm:          var(--shadow-sm);
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESIGN SYSTEM — DARK MODE
+───────────────────────────────────────────────────────────────────────────── */
 .dark {
-  --background: rgba(9, 9, 11, 1.00);
-  --foreground: rgba(250, 250, 250, 1.00);
-  --card: rgba(23, 23, 23, 1.00);
-  --card-foreground: rgba(250, 250, 250, 1.00);
-  --popover: rgba(23, 23, 23, 1.00);
-  --popover-foreground: rgba(250, 250, 250, 1.00);
-  --primary: rgba(186, 151, 255, 1.00);
-  --primary-foreground: rgba(9, 9, 11, 1.00);
-  --secondary: rgba(39, 39, 42, 1.00);
-  --secondary-foreground: rgba(250, 250, 250, 1.00);
-  --muted: rgba(39, 39, 42, 1.00);
-  --muted-foreground: rgba(161, 161, 170, 1.00);
-  --accent: rgba(39, 39, 42, 1.00);
-  --accent-foreground: rgba(250, 250, 250, 1.00);
-  --destructive: rgba(231, 0, 11, 1.00);
-  --destructive-foreground: rgba(250, 250, 250, 1.00);
-  --border: rgba(39, 39, 42, 1.00);
-  --input: rgba(39, 39, 42, 1.00);
-  --input-background: rgba(23, 23, 23, 1.00);
-  --ring: rgba(145, 127, 215, 1.00);
-  /* Background color for the Research toggle active/pressed state. */
-  --research-active-bg: #0a1a2a;
-  /* Icon and text color for the Research toggle active/pressed state. */
-  --research-active-color: #359BFF;
-  --elevation-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-  --chart-1: rgba(143, 198, 255, 1.00);
-  --chart-2: rgba(41, 126, 255, 1.00);
-  --chart-3: rgba(21, 93, 252, 1.00);
-  --chart-4: rgba(20, 71, 230, 1.00);
-  --chart-5: rgba(25, 60, 184, 1.00);
-  --sidebar: rgba(23, 23, 23, 1.00);
-  --sidebar-foreground: rgba(250, 250, 250, 1.00);
-  --sidebar-primary: rgba(250, 250, 250, 1.00);
-  --sidebar-primary-foreground: rgba(9, 9, 11, 1.00);
-  --sidebar-accent: rgba(39, 39, 42, 1.00);
-  --sidebar-accent-foreground: rgba(250, 250, 250, 1.00);
-  --sidebar-border: rgba(39, 39, 42, 1.00);
-  --sidebar-ring: rgba(145, 127, 215, 0.64);
+  /* ── Color primitives — OKLCH dark ────────────────────────────────────── */
+  --background:          oklch(0.1448 0.0000 89.8756);
+  --foreground:          oklch(0.9851 0.0000 89.8756);
+  --accent:              oklch(0.2120 0.0390 252.0000);
+  --accent-foreground:   oklch(0.9851 0.0000 89.8756);
+  --muted:               oklch(0.2739 0.0055 286.0326);
+  --muted-foreground:    oklch(0.7137 0.0192 261.3246);
+  --card:                oklch(0.2046 0.0000 89.8756);
+  --card-foreground:     oklch(0.9851 0.0000 89.8756);
+  --popover:             oklch(0.2686 0.0000 89.8756);
+  --popover-foreground:  oklch(0.9851 0.0000 89.8756);
+  --border:              oklch(1.0000 0.0000 89.8756 / 0.10);
+  --input:               oklch(1.0000 0.0000 89.8756 / 0.15);
+  --primary:             oklch(0.6290 0.1870 252.0000);
+  --primary-foreground:  oklch(0.2103 0.0059 285.8852);
+  --secondary:           oklch(0.2747 0.0060 286.0011);
+  --secondary-foreground:oklch(0.9851 0.0000 89.8756);
+  --destructive:         oklch(0.7022 0.1892 22.2279);
+  --destructive-foreground: oklch(0.9851 0.0000 89.8756);
+  --ring:                oklch(0.6809 0.1737 251.6084);
+  --sidebar:             oklch(0.2046 0.0000 89.8756);
+  --sidebar-foreground:  oklch(0.9851 0.0000 89.8756);
+  --sidebar-primary:     oklch(0.6290 0.1870 252.0000);
+  --sidebar-primary-foreground: oklch(0.9851 0.0000 89.8756);
+  --sidebar-accent:      oklch(0.2686 0.0000 89.8756);
+  --sidebar-accent-foreground:  oklch(0.9851 0.0000 89.8756);
+  --sidebar-border:      oklch(1.0000 0.0000 89.8756 / 0.10);
+  --sidebar-ring:        oklch(0.6809 0.1737 251.6084);
+
+  /* ── Extended palette — dark ───────────────────────────────────────────── */
+  --custom-focus:              oklch(0.6809 0.1737 251.6084 / 0.5);
+  --custom-destructive-focus:  oklch(0.3958 0.1331 25.7230 / 0.40);
+  --custom-bg-input-30:        oklch(1.0000 0.0000 89.8756 / 0.045);
+  --custom-bg-input-50:        oklch(1.0000 0.0000 89.8756 / 0.09);
+  --custom-bg-input-80:        oklch(1.0000 0.0000 89.8756 / 0.135);
+  --custom-bg-primary-10:      oklch(1.0000 0.0000 89.8756 / 0.10);
+  --custom-dark-input:         oklch(1.0000 0.0000 89.8756 / 0.15);
+  --custom-border-subtle:      oklch(1.0000 0.0000 89.8756 / 0.10);
+  --opacity-90:                oklch(0.0000 0.0000 0.0000 / 0.10);
+  --opacity-80:                oklch(0.0000 0.0000 0.0000 / 0.20);
+  --opacity-50:                oklch(0.0000 0.0000 0.0000 / 0.5);
+  --opacity-30:                oklch(0.0000 0.0000 0.0000 / 0.70);
+  --opacity-100:               oklch(0.0000 0.0000 0.0000 / 0);
+
+  /* ── Status colors — dark ──────────────────────────────────────────────── */
+  --success:              oklch(0.8274 0.1293 158.5084);
+  --success-foreground:   oklch(0.2860 0.0580 161.4963);
+  --success-ring:         oklch(0.4232 0.0943 158.5584);
+  --warning:              oklch(0.8594 0.1499 84.7379);
+  --warning-foreground:   oklch(0.3013 0.0800 40.8734);
+  --warning-ring:         oklch(0.4615 0.1337 40.9367);
+  --info:                 oklch(0.2120 0.0390 252.0000);
+  --info-foreground:      oklch(0.6809 0.1737 251.6084);
+  --info-ring:            oklch(0.4438 0.1014 241.2637);
+
+  /* ── Chart colors — dark ───────────────────────────────────────────────── */
+  --chart-chart-1: oklch(0.8098 0.0994 250.0063);
+  --chart-chart-2: oklch(0.6162 0.2083 259.2354);
+  --chart-chart-3: oklch(0.5465 0.2455 262.8657);
+  --chart-chart-4: oklch(0.4881 0.2429 264.3816);
+  --chart-chart-5: oklch(0.4242 0.1982 265.4989);
+
+  /* ── Shadows — dark ────────────────────────────────────────────────────── */
+  --shadow-2xs: 0px 1px 2px hsl(0 0% 0% / 0.30);
+  --shadow-xs:  0px 1px 2px hsl(0 0% 0% / 0.30);
+  --shadow-sm:  0px 1px 4px -1px hsl(0 0% 0% / 0.35), 0px 1px 2px -1px hsl(0 0% 0% / 0.30);
+  --shadow-md:  0px 2px 4px -2px hsl(0 0% 0% / 0.35), 0px 4px 6px -1px hsl(0 0% 0% / 0.30);
+  --shadow-lg:  0px 4px 6px -4px hsl(0 0% 0% / 0.35), 0px 10px 15px -3px hsl(0 0% 0% / 0.30);
+  --shadow-xl:  0px 4px 6px -4px hsl(0 0% 0% / 0.35), 0px 8px 10px -1px hsl(0 0% 0% / 0.30);
+  --shadow-2xl: 0px 1px 2px hsl(0 0% 0% / 0.50);
+  --shadow:     0px 2px 4px -2px hsl(0 0% 0% / 0.35), 0px 1px 2px -1px hsl(0 0% 0% / 0.30);
+
+  /* ── Component tokens — dark overrides ────────────────────────────────── */
+  --input-background:      var(--custom-dark-input);
+  --switch-inactive-bg:    var(--input);
+  --research-active-bg:    var(--accent);   /* dark blue tint in dark mode */
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   TAILWIND v4 — @theme inline
+   Exposes every CSS var as a Tailwind utility (bg-background, text-primary, …)
+───────────────────────────────────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
+  /* Core colors */
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-input-background:     var(--input-background);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
+  --color-destructive:          var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-2xl: 18px;
-  --radius-3xl: 20px;
-  --radius-button: var(--radius-button);
-  --radius-input: var(--radius-input);
-  --radius-checkbox: var(--radius-checkbox);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
+  --color-ring:                 var(--ring);
+
+  /* Sidebar */
+  --color-sidebar:                    var(--sidebar);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar-primary:            var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-ring:               var(--sidebar-ring);
+
+  /* Extended / custom */
+  --color-custom-focus:              var(--custom-focus);
+  --color-custom-destructive-focus:  var(--custom-destructive-focus);
+  --color-custom-bg-input-30:        var(--custom-bg-input-30);
+  --color-custom-bg-input-50:        var(--custom-bg-input-50);
+  --color-custom-bg-input-80:        var(--custom-bg-input-80);
+  --color-custom-bg-primary-10:      var(--custom-bg-primary-10);
+  --color-custom-dark-input:         var(--custom-dark-input);
+  --color-custom-border-subtle:      var(--custom-border-subtle);
+  --color-opacity-90:                var(--opacity-90);
+  --color-opacity-80:                var(--opacity-80);
+  --color-opacity-50:                var(--opacity-50);
+  --color-opacity-30:                var(--opacity-30);
+  --color-opacity-100:               var(--opacity-100);
+
+  /* Status */
+  --color-success:            var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-ring:       var(--success-ring);
+  --color-warning:            var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-ring:       var(--warning-ring);
+  --color-info:               var(--info);
+  --color-info-foreground:    var(--info-foreground);
+  --color-info-ring:          var(--info-ring);
+
+  /* Charts */
+  --color-chart-chart-1: var(--chart-chart-1);
+  --color-chart-chart-2: var(--chart-chart-2);
+  --color-chart-chart-3: var(--chart-chart-3);
+  --color-chart-chart-4: var(--chart-chart-4);
+  --color-chart-chart-5: var(--chart-chart-5);
+
+  /* Radius */
+  --radius-sm:       6px;
+  --radius-md:       8px;
+  --radius-lg:       10px;
+  --radius-xl:       14px;
+  --radius-2xl:      18px;
+  --radius-3xl:      20px;
+  --radius-button:   var(--radius-button);
+  --radius-input:    var(--radius-input);
+  --radius-checkbox: var(--radius-checkbox);
+
+  /* Shadows */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs:  var(--shadow-xs);
+  --shadow-sm:  var(--shadow-sm);
+  --shadow-md:  var(--shadow-md);
+  --shadow-lg:  var(--shadow-lg);
+  --shadow-xl:  var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+  --shadow:     var(--shadow);
+
+  /* Elevation alias (used by components) */
   --shadow-elevation-sm: var(--elevation-sm);
+
+  /* Fonts */
+  --font-sans:  var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono:  var(--font-mono);
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE STYLES
+───────────────────────────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -209,9 +330,7 @@
   }
 }
 
-/**
- * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
- */
+/* ── Base typography — only applied where no Tailwind text-* class overrides */
 @layer base {
   :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
     h1 {
@@ -221,7 +340,6 @@
       letter-spacing: -1.5px;
       line-height: 1.2;
     }
-
     h2 {
       font-size: var(--text-5xl);
       font-weight: var(--font-weight-medium);
@@ -229,7 +347,6 @@
       letter-spacing: -1.2px;
       line-height: 1.2;
     }
-
     h3 {
       font-size: var(--text-2xl);
       font-weight: var(--font-weight-semibold);
@@ -237,43 +354,36 @@
       letter-spacing: -0.6px;
       line-height: 1.3;
     }
-
     h4 {
       font-size: var(--text-lg);
       font-weight: var(--font-weight-medium);
       font-family: var(--font-family-open-runde);
       line-height: 1.4;
     }
-
     p {
       font-size: var(--text-base);
       font-weight: var(--font-weight-regular);
       font-family: var(--font-family-open-runde);
       line-height: 1.5;
     }
-
     label {
       font-size: var(--text-xs);
       font-weight: var(--font-weight-medium);
       font-family: var(--font-family-open-runde);
       line-height: 1.4;
     }
-
     button {
       font-size: var(--text-sm);
       font-weight: var(--font-weight-medium);
       font-family: var(--font-family-open-runde);
       line-height: 1.4;
     }
-
     input {
       font-size: var(--text-base);
       font-weight: var(--font-weight-regular);
       font-family: var(--font-family-open-runde);
       line-height: 1.5;
     }
-
-    /* Form labels with monospace font */
     .form-label {
       font-size: var(--text-xs);
       font-weight: var(--font-weight-medium);
