@@ -56,6 +56,18 @@
   --input-background: rgba(255, 255, 255, 1.00);
   /* The color for focus rings, outlines, and other focus indicators. */
   --ring: rgba(145, 127, 215, 1.00);
+  /* Background color for the Research toggle active/pressed state. */
+  --research-active-bg: #0a1a2a;
+  /* Icon and text color for the Research toggle active/pressed state. */
+  --research-active-color: #359BFF;
+  /* Border color for focused input fields. */
+  --input-focus-border: #359bff;
+  /* Outer glow/shadow color for focused input fields. */
+  --input-focus-glow: rgba(53, 155, 255, 0.5);
+  /* Background color for an active/on toggle switch. */
+  --switch-active-bg: #048af5;
+  /* Background color for an inactive/off toggle switch. */
+  --switch-inactive-bg: rgba(255, 255, 255, 0.14);
   /* Shadow for small elevations, such as cards or modals. */
   --elevation-sm: 0px 1px 2px 0px rgba(26, 26, 26, 0.05);
   /* The color for chart elements, such as a bar or line in a chart. */
@@ -73,9 +85,9 @@
   /* Button border radius for pill-shaped buttons. */
   --radius-button: 9999px;
   /* Card border radius for larger containers. */
-  --radius-card: 16px;
+  --radius-card: 18px;
   /* Input field border radius. */
-  --radius-input: 12px;
+  --radius-input: 14px;
   /* Small border radius for checkbox elements and similar small interactive components. */
   --radius-checkbox: 4px;
   /* The background color for sidebars, navigation menus, and other persistent elements. */
@@ -117,6 +129,10 @@
   --input: rgba(39, 39, 42, 1.00);
   --input-background: rgba(23, 23, 23, 1.00);
   --ring: rgba(145, 127, 215, 1.00);
+  /* Background color for the Research toggle active/pressed state. */
+  --research-active-bg: #0a1a2a;
+  /* Icon and text color for the Research toggle active/pressed state. */
+  --research-active-color: #359BFF;
   --elevation-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
   --chart-1: rgba(143, 198, 255, 1.00);
   --chart-2: rgba(41, 126, 255, 1.00);
@@ -159,11 +175,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: var(--radius-card);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 20px;
   --radius-button: var(--radius-button);
   --radius-input: var(--radius-input);
   --radius-checkbox: var(--radius-checkbox);

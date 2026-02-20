@@ -1,285 +1,38 @@
-import { useState, useRef, useEffect } from "react";
-import svgPaths from "../../imports/svg-47rfj0u08o";
+import { useState, useRef, useLayoutEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
+import { DropdownSelect } from "./ui/DropdownSelect";
+import { AppsDropdown } from "./ui/AppsDropdown";
+import { ToggleButton } from "./ui/ToggleButton";
+import { IconButton } from "./ui/IconButton";
+import { SendButton } from "./ui/SendButton";
+import {
+  AppsIcon,
+  WorkspaceIcon,
+  ResearchIcon,
+  PlusIcon,
+} from "./icons/InputIcons";
+import {
+  NotionIcon,
+  JiraIcon,
+  GmailIcon,
+  SlackIcon,
+  GitHubIcon,
+} from "./ui/AppsDropdown";
 
-function AppsIcon({
-  color = "var(--muted-foreground)",
-}: {
-  color?: string;
-}) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect
-        x="1.33"
-        y="1.33"
-        width="4"
-        height="4"
-        rx="0.5"
-        stroke={color}
-        strokeWidth="1.33"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <rect
-        x="1.33"
-        y="9.33"
-        width="4"
-        height="4"
-        rx="0.5"
-        stroke={color}
-        strokeWidth="1.33"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <rect
-        x="9.33"
-        y="1.33"
-        width="4"
-        height="4"
-        rx="0.5"
-        stroke={color}
-        strokeWidth="1.33"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <rect
-        x="9.33"
-        y="9.33"
-        width="4"
-        height="4"
-        rx="0.5"
-        stroke={color}
-        strokeWidth="1.33"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+import svgPaths from "../../imports/svg-865aketb4c";
 
-function WorkspaceIcon({
-  color = "var(--muted-foreground)",
-}: {
-  color?: string;
-}) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d={svgPaths.p15d9c600}
-        stroke={color}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="scale(0.97) translate(0.2, 2.1)"
-      />
-      <path
-        d={svgPaths.p3bb5e670}
-        stroke={color}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="scale(0.97) translate(0.2, 2.1)"
-      />
-    </svg>
-  );
-}
+// ─── Active app icon map ───────────────────────────────────────────────────────
 
-function ChevronDownIcon({
-  color = "var(--muted-foreground)",
-}: {
-  color?: string;
-}) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d={svgPaths.p2e4aa280}
-        stroke={color}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="translate(3.3, 5.3)"
-      />
-    </svg>
-  );
-}
+const APP_ICON_MAP: Record<string, React.ReactNode> = {
+  notion: <NotionIcon />,
+  jira: <JiraIcon />,
+  gmail: <GmailIcon />,
+  slack: <SlackIcon />,
+  github: <GitHubIcon />,
+};
 
-function ResearchIcon({
-  color = "var(--muted-foreground)",
-}: {
-  color?: string;
-}) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d={svgPaths.p3ae556c0}
-        stroke={color}
-        strokeWidth="1.33"
-        transform="scale(0.85) translate(1.2, 0.8)"
-      />
-      <path
-        d={svgPaths.p2f4ade80}
-        stroke={color}
-        strokeWidth="1.33"
-        transform="scale(0.85) translate(1.2, 0.8)"
-      />
-      <path
-        d={svgPaths.p2ecf0900}
-        stroke={color}
-        strokeWidth="1.33"
-        transform="scale(0.85) translate(1.2, 0.8)"
-      />
-      <path
-        d={svgPaths.p2acca280}
-        stroke={color}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="scale(0.85) translate(1.2, 0.8)"
-      />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d={svgPaths.pd334180}
-        stroke="var(--foreground)"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="translate(2.67, 2.67)"
-      />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d={svgPaths.p4f29f00}
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.33"
-        transform="translate(2.67, 0.67)"
-      />
-    </svg>
-  );
-}
-
-// ─── Dropdown ─────────────────────────────────────────────────────────────────
-
-interface DropdownProps {
-  open: boolean;
-  onClose: () => void;
-  options: string[];
-  selected: string;
-  onSelect: (val: string) => void;
-  triggerRef: React.RefObject<HTMLButtonElement | null>;
-}
-
-function Dropdown({
-  open,
-  onClose,
-  options,
-  selected,
-  onSelect,
-  triggerRef,
-}: DropdownProps) {
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    function handleClick(e: MouseEvent) {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(e.target as Node)
-      ) {
-        onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () =>
-      document.removeEventListener("mousedown", handleClick);
-  }, [open, onClose, triggerRef]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      ref={menuRef}
-      className="absolute top-full mt-1 left-0 z-50 min-w-[140px] rounded-[var(--radius)] border border-[var(--border)] overflow-hidden"
-      style={{
-        background: "var(--card)",
-        boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-      }}
-    >
-      {options.map((opt) => (
-        <button
-          key={opt}
-          onClick={() => {
-            onSelect(opt);
-            onClose();
-          }}
-          className="w-full text-left px-3 py-2 flex items-center gap-2 transition-colors"
-          style={{
-            fontSize: "var(--text-sm)",
-            fontFamily: "var(--font-family-open-runde)",
-            fontWeight: "var(--font-weight-medium)",
-            color:
-              opt === selected
-                ? "var(--foreground)"
-                : "var(--muted-foreground)",
-            background:
-              opt === selected
-                ? "rgba(255,255,255,0.06)"
-                : "transparent",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background =
-              "rgba(255,255,255,0.06)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background =
-              opt === selected
-                ? "rgba(255,255,255,0.06)"
-                : "transparent")
-          }
-        >
-          {opt === selected && (
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              className="shrink-0"
-            >
-              <path
-                d="M2 6L5 9L10 3"
-                stroke="var(--foreground)"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-          {opt !== selected && (
-            <span className="w-3 shrink-0" />
-          )}
-          {opt}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ─── Main Component ────────────────────────────────────────────────────────────
+// ─── Option lists ─────────────────────────────────────────────────────────────
 
 const APP_OPTIONS = [
   "All Apps",
@@ -290,268 +43,374 @@ const APP_OPTIONS = [
   "Jira",
 ];
 const WORKSPACE_OPTIONS = [
-  "Personal",
-  "Team Alpha",
+  "AI Productivity Agent",
+  "Professional Development",
   "Design System",
-  "Product",
+  "Creative Projects",
 ];
 const MODEL_OPTIONS = [
-  "Hermes",
-  "Claude 3.5",
-  "GPT-4o",
-  "Gemini Pro",
+  "Mistral 3",
+  "Opus 4.6",
+  "GPT-5.2",
+  "Gemini 3.0",
 ];
+
+// ─── Quote block ──────────────────────────────────────────────────────────────
+
+function QuoteBlock({
+  text,
+  onDismiss,
+}: {
+  text: string;
+  onDismiss: () => void;
+}) {
+  return (
+    <div
+      className="relative shrink-0 w-full overflow-hidden"
+      style={{
+        background: "var(--muted)",
+        borderRadius: "10px",
+        maxHeight: 56,
+      }}
+    >
+      <div
+        className="flex gap-[8px] items-start w-full"
+        style={{ padding: "8px 12px", maxHeight: 56, overflow: "hidden" }}
+      >
+        {/* Quote text */}
+        <p
+          className="whitespace-pre-wrap"
+          style={{
+            flex: "1 0 0",
+            minHeight: "1px",
+            minWidth: "1px",
+            fontSize: "var(--text-sm)",
+            fontFamily: "var(--font-family-open-runde)",
+            fontWeight: "var(--font-weight-regular)",
+            color: "var(--muted-foreground)",
+            lineHeight: "20px",
+            opacity: 0.8,
+            margin: 0,
+          }}
+        >
+          {text}
+        </p>
+
+        {/* Dismiss button */}
+        <button
+          onClick={onDismiss}
+          aria-label="Remove quote"
+          className="group flex items-center justify-center shrink-0 cursor-pointer rounded-[8px] transition-colors"
+          style={{
+            width: 32,
+            height: 32,
+            background: "transparent",
+            border: "none",
+            padding: 8,
+            color: "var(--muted-foreground)",
+          }}
+          onMouseEnter={(e) =>
+            ((e.currentTarget as HTMLButtonElement).style.background =
+              "rgba(255,255,255,0.045)")
+          }
+          onMouseLeave={(e) =>
+            ((e.currentTarget as HTMLButtonElement).style.background =
+              "transparent")
+          }
+        >
+          <div className="relative shrink-0" style={{ width: 16, height: 16 }}>
+            <div className="absolute inset-1/4">
+              <div className="absolute" style={{ inset: "-8.31%" }}>
+                <svg
+                  className="block size-full"
+                  fill="none"
+                  preserveAspectRatio="none"
+                  viewBox="0 0 9.33 9.33"
+                >
+                  <path
+                    d={svgPaths.p24442000}
+                    stroke="var(--muted-foreground)"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.33"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── InputField ───────────────────────────────────────────────────────────────
 
 export function InputField() {
   const [text, setText] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Textarea auto-resize ─────────────────────────────────────────────────────
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const LINE_HEIGHT = 20;          // must match lineHeight: "20px" in style
+  const MAX_LINES   = 12;
+  const MAX_CONTENT_HEIGHT = LINE_HEIGHT * MAX_LINES; // 240 px
+
+  useLayoutEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    // Reset height so scrollHeight reflects true content height
+    ta.style.height = "0px";
+    const scrollH = ta.scrollHeight;
+    const capped   = Math.min(scrollH, MAX_CONTENT_HEIGHT);
+    ta.style.height        = `${capped}px`;
+    ta.style.overflowY     = scrollH > MAX_CONTENT_HEIGHT ? "auto" : "hidden";
+  }, [text]);
+
+  // Quote state
+  const [quoteText, setQuoteText] = useState<string | null>(
+    "That\u2019s a strong framing. If the core pain is \u201cattention allocation,\u201d then the product isn\u2019t a task tracker\u2014it\u2019s a prioritisation engine.",
+  );
+
+  // Dropdown open states — kept here so we can close siblings
   const [appsOpen, setAppsOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
-  const [selectedApp, setSelectedApp] = useState("Apps");
+
+  // Apps: multi-select via toggles
+  const [enabledApps, setEnabledApps] = useState<string[]>([]);
+
+  // Selected values
   const [selectedWorkspace, setSelectedWorkspace] =
     useState("Workspace");
-  const [selectedModel, setSelectedModel] = useState("Hermes");
+  const [selectedModel, setSelectedModel] = useState("Mistral 3");
+
+  // Toggle state
   const [researchActive, setResearchActive] = useState(false);
 
-  const appsTriggerRef = useRef<HTMLButtonElement>(null);
-  const workspaceTriggerRef = useRef<HTMLButtonElement>(null);
-  const modelTriggerRef = useRef<HTMLButtonElement>(null);
+  // Workspace error state — set when send is clicked with text but no workspace chosen
+  const [workspaceError, setWorkspaceError] = useState(false);
+
+  // Helper: open one dropdown, close the rest
+  const openOnly = (target: "apps" | "workspace" | "model") => {
+    setAppsOpen(target === "apps");
+    setWorkspaceOpen(target === "workspace");
+    setModelOpen(target === "model");
+  };
+
+  const isBlue = enabledApps.length > 0 || selectedWorkspace !== "Workspace";
 
   return (
-    <div
-      className="w-[555px] p-[2px] rounded-[var(--radius-card)] flex flex-col items-start"
-      style={{ background: "var(--border)" }}
+    // Outer wrapper is a layout motion.div so the entire component (including
+    // top-bar) participates in FLIP. Because App.tsx uses justify-end, the
+    // bottom edge is always pinned → every height change pushes the top edge
+    // upward, giving "grows bottom-to-top" behaviour for free.
+    <motion.div
+      layout
+      className="w-[555px] rounded-2xl flex flex-col items-start p-[4px]"
+      style={{
+        background: (enabledApps.length > 0 || selectedWorkspace !== "Workspace") ? "var(--switch-active-bg)" : "var(--border)",
+        transition: "background 0.25s ease",
+      }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Top bar: dropdowns */}
-      <div className="w-full px-[6px] py-[6px] flex items-center gap-[6px]">
-        {/* Apps Dropdown */}
-        <div className="relative">
-          <button
-            ref={appsTriggerRef}
-            onClick={() => {
-              setAppsOpen((v) => !v);
-              setWorkspaceOpen(false);
-              setModelOpen(false);
-            }}
-            className="flex items-center gap-[6px] px-[10px] py-[4px] rounded-[var(--radius)] transition-colors cursor-pointer"
-            style={{
-              background: appsOpen
-                ? "rgba(255,255,255,0.10)"
-                : "rgba(255,255,255,0.05)",
-            }}
-          >
-            <AppsIcon
-              color={
-                selectedApp !== "Apps"
-                  ? "var(--foreground)"
-                  : "var(--muted-foreground)"
-              }
-            />
-            <span
-              style={{
-                fontSize: "var(--text-sm)",
-                fontFamily: "var(--font-family-open-runde)",
-                fontWeight: "var(--font-weight-medium)",
-                color: "var(--foreground)",
-                lineHeight: "20px",
-              }}
-            >
-              {selectedApp}
-            </span>
-            <ChevronDownIcon />
-          </button>
-          <Dropdown
-            open={appsOpen}
-            onClose={() => setAppsOpen(false)}
-            options={APP_OPTIONS}
-            selected={selectedApp === "Apps" ? "" : selectedApp}
-            onSelect={setSelectedApp}
-            triggerRef={appsTriggerRef}
-          />
-        </div>
+      {/* ── Top bar ── */}
+      <motion.div
+        layout
+        className="w-full px-[6px] py-[6px] flex items-center gap-[6px]"
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <AppsDropdown
+          open={appsOpen}
+          onOpenChange={(o) =>
+            o ? openOnly("apps") : setAppsOpen(false)
+          }
+          enabledApps={enabledApps}
+          onEnabledAppsChange={setEnabledApps}
+          bgActive={isBlue}
+          triggerIcon={
+            enabledApps.length > 0 ? (
+              APP_ICON_MAP[enabledApps[0]]
+            ) : (
+              <AppsIcon color={isBlue ? "white" : "var(--muted-foreground)"} />
+            )
+          }
+        />
 
-        {/* Workspace Dropdown */}
-        <div className="relative">
-          <button
-            ref={workspaceTriggerRef}
-            onClick={() => {
-              setWorkspaceOpen((v) => !v);
-              setAppsOpen(false);
-              setModelOpen(false);
-            }}
-            className="flex items-center gap-[6px] px-[10px] py-[4px] rounded-[var(--radius)] transition-colors cursor-pointer"
-            style={{
-              background: workspaceOpen
-                ? "rgba(255,255,255,0.10)"
-                : "rgba(255,255,255,0.05)",
-            }}
-          >
+        <DropdownSelect
+          icon={
             <WorkspaceIcon
               color={
-                selectedWorkspace !== "Workspace"
-                  ? "var(--foreground)"
-                  : "var(--muted-foreground)"
+                enabledApps.length > 0
+                  ? "white"
+                  : selectedWorkspace !== "Workspace"
+                    ? "var(--foreground)"
+                    : "var(--muted-foreground)"
               }
             />
-            <span
+          }
+          value={selectedWorkspace}
+          options={WORKSPACE_OPTIONS}
+          onChange={(val) => {
+            setSelectedWorkspace(val);
+            setWorkspaceError(false);
+          }}
+          open={workspaceOpen}
+          onOpenChange={(o) => {
+            if (o) setWorkspaceError(false);
+            o ? openOnly("workspace") : setWorkspaceOpen(false);
+          }}
+          triggerVariant="pill"
+          appsActive={enabledApps.length > 0}
+          bgActive={isBlue}
+          defaultValue="Workspace"
+          error={workspaceError}
+          errorMessage="Select a workspace"
+          onErrorClear={() => setWorkspaceError(false)}
+          placement="top"
+        />
+      </motion.div>
+
+      {/* ── Input card ── */}
+      <div className="relative w-full">
+        {/*
+          motion.div with layout — the card itself is the animated container.
+          When the quote mounts/unmounts, layout smoothly re-sizes the card height.
+        */}
+        <motion.div
+          layout
+          className="w-full rounded-xl flex flex-col overflow-visible"
+          style={{ background: "var(--card)", padding: "4px", gap: "4px" }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* Quote block ─ exit uses only transform+opacity (no height), so the
+              card's layout prop stays frozen during the quote animation and only
+              fires its own height animation after AnimatePresence removes the
+              element from the DOM → giving a clean two-phase sequence. */}
+          <AnimatePresence initial={false}>
+            {quoteText && (
+              <motion.div
+                key="quote"
+                initial={{ opacity: 0, scaleY: 0.8 }}
+                animate={{
+                  opacity: 1,
+                  scaleY: 1,
+                  transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+                }}
+                exit={{
+                  opacity: 0,
+                  scaleY: 0.8,
+                  transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+                }}
+                style={{ transformOrigin: "top center" }}
+              >
+                <QuoteBlock
+                  text={quoteText}
+                  onDismiss={() => setQuoteText(null)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Textarea */}
+          <div className="px-[12px] pt-[12px] pb-[4px]">
+            <textarea
+              ref={textareaRef}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onKeyDown={(e) => {
+                // Stop keyboard events from bubbling out of the textarea into
+                // parent DOM nodes / the iframe's window listeners (e.g. Figma
+                // global shortcuts). stopPropagation does NOT call
+                // preventDefault, so all native browser text-editing shortcuts
+                // (Ctrl/Cmd + A, C, X, V, Z, …) continue to work as expected.
+                e.stopPropagation();
+              }}
+              placeholder="Explore an idea…"
+              className="w-full bg-transparent resize-none outline-none border-none placeholder:opacity-80"
               style={{
                 fontSize: "var(--text-sm)",
                 fontFamily: "var(--font-family-open-runde)",
-                fontWeight: "var(--font-weight-medium)",
+                fontWeight: "var(--font-weight-regular)",
                 color: "var(--foreground)",
-                lineHeight: "20px",
+                lineHeight: `${LINE_HEIGHT}px`,
+                caretColor: "var(--foreground)",
+                // 2-line floor; JS overrides upward up to MAX_CONTENT_HEIGHT
+                minHeight: `${LINE_HEIGHT * 2}px`,
+                height: `${LINE_HEIGHT * 2}px`,
+                overflowY: "hidden",
               }}
-            >
-              {selectedWorkspace}
-            </span>
-            <ChevronDownIcon />
-          </button>
-          <Dropdown
-            open={workspaceOpen}
-            onClose={() => setWorkspaceOpen(false)}
-            options={WORKSPACE_OPTIONS}
-            selected={
-              selectedWorkspace === "Workspace"
-                ? ""
-                : selectedWorkspace
-            }
-            onSelect={setSelectedWorkspace}
-            triggerRef={workspaceTriggerRef}
-          />
-        </div>
-      </div>
-
-      {/* Input card */}
-      <div
-        className="w-full rounded-[14px] flex flex-col"
-        style={{ background: "var(--input-background)" }}
-      >
-        {/* Textarea */}
-        <div className="px-[12px] pt-[12px] pb-[4px] min-h-[62px]">
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Explore an idea…"
-            rows={2}
-            className="w-full bg-transparent resize-none outline-none border-none placeholder:opacity-80"
-            style={{
-              fontSize: "var(--text-sm)",
-              fontFamily: "var(--font-family-open-runde)",
-              fontWeight: "var(--font-weight-normal)",
-              color: "var(--foreground)",
-              lineHeight: "20px",
-              caretColor: "var(--foreground)",
-            }}
-          />
-        </div>
-
-        {/* Bottom bar */}
-        <div className="px-[12px] pb-[12px] pt-[6px] flex items-center justify-between">
-          {/* Left controls */}
-          <div className="flex items-center gap-[6px]">
-            {/* + Button */}
-            <button
-              className="flex items-center justify-center rounded-[var(--radius)] shrink-0 size-[28px] transition-opacity hover:opacity-80 cursor-pointer"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 100%), var(--secondary)",
-                boxShadow:
-                  "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px var(--border)",
-              }}
-            >
-              <PlusIcon />
-            </button>
-
-            {/* Research Toggle */}
-            <button
-              onClick={() => setResearchActive((v) => !v)}
-              className="flex items-center gap-[6px] px-[6px] py-[4px] rounded-[var(--radius)] transition-all cursor-pointer"
-              style={{
-                background: researchActive
-                  ? "rgba(255,255,255,0.08)"
-                  : "transparent",
-                boxShadow: researchActive
-                  ? "0 0 0 1px rgba(255,255,255,0.12)"
-                  : "none",
-              }}
-            >
-              <ResearchIcon
-                color={
-                  researchActive
-                    ? "var(--foreground)"
-                    : "var(--muted-foreground)"
-                }
-              />
-              <span
-                style={{
-                  fontSize: "var(--text-sm)",
-                  fontFamily: "var(--font-family-open-runde)",
-                  fontWeight: "var(--font-weight-medium)",
-                  color: researchActive
-                    ? "var(--foreground)"
-                    : "var(--muted-foreground)",
-                  lineHeight: "20px",
-                  transition: "color 0.15s",
-                }}
-              >
-                Research
-              </span>
-            </button>
-
-            {/* Model Dropdown */}
-            <div className="relative">
-              <button
-                ref={modelTriggerRef}
-                onClick={() => {
-                  setModelOpen((v) => !v);
-                  setAppsOpen(false);
-                  setWorkspaceOpen(false);
-                }}
-                className="flex items-center gap-[4px] px-[8px] py-[4px] rounded-[var(--radius)] transition-colors cursor-pointer"
-                style={{
-                  background: modelOpen
-                    ? "rgba(255,255,255,0.06)"
-                    : "transparent",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "var(--text-sm)",
-                    fontFamily: "var(--font-family-open-runde)",
-                    fontWeight: "var(--font-weight-medium)",
-                    color: "var(--muted-foreground)",
-                    lineHeight: "20px",
-                  }}
-                >
-                  {selectedModel}
-                </span>
-                <ChevronDownIcon />
-              </button>
-              <Dropdown
-                open={modelOpen}
-                onClose={() => setModelOpen(false)}
-                options={MODEL_OPTIONS}
-                selected={selectedModel}
-                onSelect={setSelectedModel}
-                triggerRef={modelTriggerRef}
-              />
-            </div>
+            />
           </div>
 
-          {/* Mic Button */}
-          <button
-            className="flex items-center justify-center rounded-[var(--radius)] shrink-0 size-[28px] transition-opacity hover:opacity-90 cursor-pointer"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%), #048af5",
-              boxShadow:
-                "0px 1px 2px 0px rgba(0,0,0,0.05), 0px 0px 0px 1px #048af5",
-            }}
-          >
-            <MicIcon />
-          </button>
-        </div>
+          {/* Bottom bar */}
+          <div className="px-[12px] pb-[12px] pt-[6px] flex items-center justify-between">
+            {/* Left controls */}
+            <div className="flex items-center gap-[6px]">
+              <IconButton
+                icon={<PlusIcon />}
+                ariaLabel="Attach"
+                variant="default"
+              />
+
+              <ToggleButton
+                active={researchActive}
+                onToggle={() => setResearchActive((v) => !v)}
+                icon={(color) => <ResearchIcon color={color} />}
+                label="Research"
+              />
+
+              <DropdownSelect
+                value={selectedModel}
+                options={MODEL_OPTIONS}
+                onChange={setSelectedModel}
+                open={modelOpen}
+                onOpenChange={(o) =>
+                  o ? openOnly("model") : setModelOpen(false)
+                }
+                triggerVariant="ghost"
+                labelColor="var(--muted-foreground)"
+                hideSearch
+                noSelectedBg
+                disableDeselect
+                menuWidth="max-content"
+                placement="bottom"
+              />
+            </div>
+
+            <SendButton
+              hasText={text.length > 0}
+              appsActive={enabledApps.length > 0}
+              onClick={() => {
+                if (
+                  text.length > 0 &&
+                  !WORKSPACE_OPTIONS.includes(selectedWorkspace)
+                ) {
+                  setWorkspaceError(true);
+                  return;
+                }
+                setWorkspaceError(false);
+              }}
+            />
+          </div>
+        </motion.div>
+
+        {/* Focus ring overlay — fades in/out on textarea focus */}
+        <motion.div
+          aria-hidden="true"
+          animate={{ opacity: isFocused ? 1 : 0 }}
+          transition={{ duration: 0.15, ease: "easeInOut" }}
+          className="absolute inset-0 pointer-events-none rounded-[var(--radius-input)]"
+          style={{
+            pointerEvents: "none",
+            border: "1px solid var(--input-focus-border)",
+            boxShadow:
+              "0px 0px 0px 3px var(--input-focus-glow)",
+          }}
+        />
       </div>
-    </div>
+    </motion.div>
   );
 }
