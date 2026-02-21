@@ -303,7 +303,6 @@ function QuoteBlock({
         style={{ padding: "8px 12px", maxHeight: 56, overflow: "hidden" }}
       >
         <p
-          className="whitespace-pre-wrap"
           style={{
             flex: "1 0 0",
             minHeight: "1px",
@@ -315,6 +314,10 @@ function QuoteBlock({
             lineHeight: "20px",
             opacity: 0.8,
             margin: 0,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
           }}
         >
           {text}
@@ -350,7 +353,13 @@ function QuoteBlock({
 
 // ─── InputField ───────────────────────────────────────────────────────────────
 
-export function InputField() {
+export function InputField({
+  quoteText: externalQuoteText,
+  onQuoteDismiss,
+}: {
+  quoteText?: string | null;
+  onQuoteDismiss?: () => void;
+} = {}) {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -434,8 +443,13 @@ export function InputField() {
     ta.style.overflowY = scrollH > MAX_CONTENT_HEIGHT ? "auto" : "hidden";
   }, [text]);
 
-  // Quote state
-  const [quoteText, setQuoteText] = useState<string | null>(null);
+  // Quote state — synced from external prop when provided
+  const [quoteText, setQuoteText] = useState<string | null>(externalQuoteText ?? null);
+
+  // Keep internal state in sync whenever the external prop changes
+  useEffect(() => {
+    setQuoteText(externalQuoteText ?? null);
+  }, [externalQuoteText]);
 
   // Dropdown open states
   const [appsOpen, setAppsOpen] = useState(false);
@@ -556,22 +570,50 @@ export function InputField() {
               {quoteText && (
                 <motion.div
                   key="quote"
-                  initial={{ opacity: 0, scaleY: 0.8 }}
+                  initial={{ opacity: 0, scaleY: 0.72, y: -6 }}
                   animate={{
                     opacity: 1,
                     scaleY: 1,
-                    transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+                    y: 0,
+                    transition: {
+                      opacity: { duration: 0.18, ease: "easeOut" },
+                      scaleY: {
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 22,
+                        mass: 0.7,
+                      },
+                      y: {
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 22,
+                        mass: 0.7,
+                      },
+                    },
                   }}
                   exit={{
                     opacity: 0,
-                    scaleY: 0.8,
-                    transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+                    scaleY: 0.78,
+                    y: -4,
+                    transition: {
+                      opacity: { duration: 0.14, ease: "easeIn" },
+                      scaleY: {
+                        type: "spring",
+                        stiffness: 480,
+                        damping: 28,
+                        mass: 0.6,
+                      },
+                      y: { duration: 0.14, ease: "easeIn" },
+                    },
                   }}
                   style={{ transformOrigin: "top center" }}
                 >
                   <QuoteBlock
                     text={quoteText}
-                    onDismiss={() => setQuoteText(null)}
+                    onDismiss={() => {
+                      setQuoteText(null);
+                      if (onQuoteDismiss) onQuoteDismiss();
+                    }}
                   />
                 </motion.div>
               )}

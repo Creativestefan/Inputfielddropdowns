@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { InputField } from "./components/InputField";
 import { NewChatButton } from "./components/ui/NewChatButton";
+import { ShowQuoteCheckbox } from "./components/ui/ShowQuoteCheckbox";
+
+// ── Placeholder quote shown when the checkbox is enabled ─────────────────────
+const SAMPLE_QUOTE =
+  "That's a strong framing. If the core pain is \"attention allocation,\" then the product isn't a task tracker—it's a prioritisation engine.";
 
 export default function App() {
   const [showInput, setShowInput] = useState(false);
+  const [quoteChecked, setQuoteChecked] = useState(false);
 
-  // Hoist .dark to <html> so every CSS layer (html, body, app div)
-  // resolves tokens from the same dark scope — one background colour.
   useEffect(() => {
     document.documentElement.classList.add("dark");
     return () => document.documentElement.classList.remove("dark");
@@ -26,10 +30,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.94 }}
-            transition={{
-              duration: 0.1,
-              ease: "easeIn",
-            }}
+            transition={{ duration: 0.1, ease: "easeIn" }}
           >
             <NewChatButton onClick={() => setShowInput(true)} />
           </motion.div>
@@ -45,11 +46,27 @@ export default function App() {
               stiffness: 340,
               damping: 22,
               mass: 1,
-              // stagger opacity slightly ahead of the spring so it feels snappy
               opacity: { duration: 0.18, ease: "easeOut" },
             }}
           >
-            <InputField />
+            <InputField
+              quoteText={quoteChecked ? SAMPLE_QUOTE : null}
+              onQuoteDismiss={() => setQuoteChecked(false)}
+            />
+
+            {/* ── Show Quote checkbox — 64 px below the input ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, duration: 0.22, ease: "easeOut" }}
+              style={{ marginTop: 64 }}
+              className="flex justify-center"
+            >
+              <ShowQuoteCheckbox
+                checked={quoteChecked}
+                onChange={setQuoteChecked}
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
